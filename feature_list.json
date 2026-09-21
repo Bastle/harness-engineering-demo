@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "description": "功能清单 - 跟踪所有任务的完成状态",
+  "rules": [
+    "每次只激活一个功能项（WIP=1）",
+    "只有验证命令通过才能标记为 passing",
+    "不要删除或修改功能项，只能修改 state 字段"
+  ],
+  "features": [
+    {
+      "id": "F01",
+      "behavior": "创建一个示例项目并能正常运行",
+      "verification": "ls example-project/ && cat example-project/README.md",
+      "state": "not_started",
+      "evidence": ""
+    },
+    {
+      "id": "F02",
+      "behavior": "为示例项目添加单元测试",
+      "verification": "cd example-project && npm test",
+      "state": "not_started",
+      "evidence": "",
+      "depends_on": ["F01"]
+    },
+    {
+      "id": "F03",
+      "behavior": "配置 make test 命令统一运行所有子项目测试",
+      "verification": "make test",
+      "state": "not_started",
+      "evidence": "",
+      "depends_on": ["F02"]
+    }
+  ]
+}
