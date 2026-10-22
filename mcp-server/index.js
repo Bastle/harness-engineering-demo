@@ -126,6 +126,7 @@ function fail(id, code, message) {
 }
 
 function handle(msg) {
+  // 到这里的 msg 一定是普通对象（null/数组/标量已在入口挡掉）
   const { id, method, params } = msg;
 
   // 通知类消息（无 id）不回包——notifications/initialized 就是这一类
@@ -152,6 +153,13 @@ function handle(msg) {
 
 // ---------- 主循环：一行一条消息 ----------
 
+function send(reply) {
+  // 客户端断开时写 stdout 可能抛 EPIPE——只丢弃这条应答，不带走整个进程
+  try {
+    process.stdout.write(JSON.stringify(reply) + '\n');
+  } catch (_) { /* 客户端已断开 */ }
+}
+
 const rl = readline.createInterface({ input: process.stdin });
 
 rl.on('line', (line) => {
@@ -160,10 +168,22 @@ rl.on('line', (line) => {
   try {
     msg = JSON.parse(line);
   } catch (_) {
-    process.stdout.write(JSON.stringify(fail(null, -32700, 'Parse error')) + '\n');
+    send(fail(null, -32700, 'Parse error'));
     return;
   }
-  const reply = handle(msg);
+  // 合法 JSON 但不是消息对象（null、数组、裸标量）→ Invalid Request
+  // 这类输入能绕过 JSON.parse 的 catch，不挡就会把 server 打崩
+  if (msg === null || typeof msg !== 'object' || Array.isArray(msg)) {
+    send(fail(null, -32600, 'Invalid Request'));
+    return;
+  }
+  let reply;
+  try {
+    reply = handle(msg);
+  } catch (err) {
+    // handler 里任何没料到的异常都变成 -32603，进程继续活着
+    reply = fail(msg.id !== undefined ? msg.id : null, -32603, `Internal error: ${err.message}`);
+  }
   // 有应答才写 stdout；写完就等下一行
-  if (reply) process.stdout.write(JSON.stringify(reply) + '\n');
+  if (reply) send(reply);
 });

@@ -106,7 +106,11 @@ $ claude mcp get harness-demo
 
 三个如实的发现：
 
-1. **相对路径可用**：`args` 里的 `mcp-server/index.js` 被正确解析，无需绝对路径
+1. **相对路径可用（限 Claude Code）**：`args` 里的 `mcp-server/index.js` 被正确解析——
+   Claude Code 从项目根目录拉起 server，所以相对路径成立；换一个 MCP 客户端或
+   从别的 cwd 启动就未必。要可移植就写绝对路径，或用 `${CLAUDE_PROJECT_DIR}`
+   之类的占位符（以客户端文档为准）。注意这说的是 `args` 里"找得到脚本"的问题，
+   和 server 内部用 `__dirname` 读文件是两回事
 2. **项目级配置要"批准"**：`.mcp.json` 是共享配置，Claude Code 首次使用会在会话里
    要求确认信任（防止仓库偷渡恶意 server）——这是安全特性，不是故障
 3. **握手测试自带最小客户端**：`test.js` 不依赖 claude CLI，clone 下来就能验证
@@ -206,7 +210,7 @@ description 里的触发条件时，Claude Code 把整份 SKILL.md 读进上下�
 | `description` | **只写触发条件**，不写流程摘要（见下） |
 
 > **为什么 description 只写触发条件？**
-> 实测教训：若 description 里写了流程摘要，agent 会照摘要的简版做，
+> 经验教训（业界常见失败模式，非本仓库实测）：若 description 里写了流程摘要，agent 会照摘要的简版做，
 > 跳过正文里的详细步骤。description 是"门铃"，正文才是"说明书"。
 
 ### 5.2 正文结构（本项目模板）

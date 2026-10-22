@@ -48,6 +48,7 @@ function main() {
   const rl = readline.createInterface({ input: child.stdout });
 
   const pending = new Map(); // JSON-RPC id -> resolve
+  const raw = []; // 所有应答行（含无主 id 的错误应答），供敌意输入断言用
   let nextId = 1;
 
   // 全局超时：server 不回包时不许测试挂死
@@ -66,6 +67,7 @@ function main() {
 
   // 一行一条 JSON-RPC 应答，按 id 送回对应的等待者
   rl.on('line', (line) => {
+    raw.push(line);
     let msg;
     try { msg = JSON.parse(line); } catch (_) { return; }
     if (msg.id !== undefined && pending.has(msg.id)) {
@@ -116,6 +118,23 @@ function main() {
       'tools/call list_features 返回功能清单且包含 F01',
       result.isError === false && text.includes('F01'),
       text.slice(0, 100)
+    );
+
+    // 5) 敌意输入 —— 合法 JSON 但不是消息对象（null/数组/裸标量）
+    //    文档承诺"绝不让 server 崩溃"，这一步就是该承诺的守卫
+    for (const junk of ['null', '[]', '"hello"', '42']) {
+      child.stdin.write(junk + '\n');
+    }
+    const probe = await request('tools/list', {});
+    check(
+      '垃圾输入后 server 不崩且仍正常应答',
+      !!(probe.result && Array.isArray(probe.result.tools)),
+      JSON.stringify(probe).slice(0, 100)
+    );
+    check(
+      '垃圾输入收到 -32600 Invalid Request 应答',
+      raw.some((l) => l.includes('-32600')),
+      `已收应答行数: ${raw.length}`
     );
 
     clearTimeout(timer);
