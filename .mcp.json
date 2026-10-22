@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "harness-demo": {
+      "command": "node",
+      "args": ["mcp-server/index.js"]
+    }
+  }
+}

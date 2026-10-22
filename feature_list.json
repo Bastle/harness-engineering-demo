@@ -42,8 +42,8 @@
       "id": "F05",
       "behavior": "创建项目级 .mcp.json 配置，让 Claude Code 能发现并连接 harness-demo server",
       "verification": "test -f .mcp.json && python3 -c \"import json; d=json.load(open('.mcp.json')); assert 'harness-demo' in d['mcpServers']\"",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "verification PASS；claude mcp list 识别为 Project config（harness-demo: node mcp-server/index.js），相对路径生效，首次使用需在会话中批准",
       "depends_on": ["F04"],
       "files": [".mcp.json"]
     },
