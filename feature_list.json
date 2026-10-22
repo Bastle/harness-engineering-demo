@@ -59,8 +59,8 @@
       "id": "F07",
       "behavior": "编写实用 Skill new-feature：引导按 NEW_FEATURE 模板登记新功能条目",
       "verification": "test -f .claude/skills/new-feature/SKILL.md && grep -q '^name: new-feature' .claude/skills/new-feature/SKILL.md && test -f templates/NEW_FEATURE.md",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "verification PASS（文件存在 + frontmatter name 正确 + NEW_FEATURE.md 模板存在）",
       "files": [".claude/skills/new-feature/SKILL.md"]
     },
     {
