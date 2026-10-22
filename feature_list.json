@@ -34,8 +34,8 @@
       "id": "F04",
       "behavior": "实现零依赖本地 demo MCP server（stdio JSON-RPC，list_features/get_feature/project_status 三工具）并通过握手自测",
       "verification": "node mcp-server/test.js",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "node mcp-server/test.js → 3 通过 0 失败（initialize 握手 / tools/list 三工具 / tools/call list_features 含 F01）；make test 5 通过 0 失败",
       "files": ["mcp-server/index.js", "mcp-server/test.js"]
     },
     {
