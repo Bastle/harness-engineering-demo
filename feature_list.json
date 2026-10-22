@@ -67,8 +67,8 @@
       "id": "F08",
       "behavior": "编写主教学文档《MCP与Skill接入实录》（含第三方示例、SKILL.md 拆解、全景整合、实施清单）",
       "verification": "test -s 'docs/MCP与Skill接入实录.md' && grep -q 'tools/call' 'docs/MCP与Skill接入实录.md' && grep -q '实施清单' 'docs/MCP与Skill接入实录.md'",
-      "state": "in_progress",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "verification PASS（334 行，含 tools/call 与实施清单章节）；敏感词扫描 clean；第三方包名核对状态如实记录于 4.5 节",
       "depends_on": ["F04", "F05", "F06", "F07"],
       "files": ["docs/MCP与Skill接入实录.md"]
     },

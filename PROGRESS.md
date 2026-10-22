@@ -14,6 +14,7 @@
 - [x] F05 .mcp.json 项目级 MCP 配置（claude mcp list 冒烟通过）
 - [x] F06 实用 Skill project-status（make status 取证汇总）
 - [x] F07 实用 Skill new-feature（NEW_FEATURE 模板引导）
+- [x] F08 主教学文档《MCP与Skill接入实录》（334 行，九节）
 
 ## 进行中
 - 无
