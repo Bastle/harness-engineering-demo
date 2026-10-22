@@ -15,6 +15,7 @@
 - [x] F06 实用 Skill project-status（make status 取证汇总）
 - [x] F07 实用 Skill new-feature（NEW_FEATURE 模板引导）
 - [x] F08 主教学文档《MCP与Skill接入实录》（334 行，九节）
+- [x] F09 挂接更新（README 学习路径/目录树、CLAUDE.md、ADR-006/007、三道防线、AGENTS.md）
 
 ## 进行中
 - 无
@@ -23,7 +24,5 @@
 - 无
 
 ## 下一步
-1. F06/F07 编写 project-status 与 new-feature 两个实用 Skill
-2. F08 编写《MCP与Skill接入实录》主教学文档
-3. F09 挂接更新（README/CLAUDE.md/ADR-006/三道防线/AGENTS.md）
-4. F10 把 MCP/Skill 校验纳入 make test/lint
+1. F10 把 MCP 握手测试与 Skill 结构检查纳入 make test/lint
+2. 端到端人工验收：会话内批准 harness-demo 并实调工具；触发两个 Skill

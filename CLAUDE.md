@@ -19,6 +19,10 @@
 | `feature_list.json` | 功能清单 | 人和 AI |
 | `Makefile` | 任务入口 | 人和 AI |
 | `docs/DECISIONS.md` | 设计决策记录 | 人 |
+| `.mcp.json` | 项目级 MCP 配置 | Claude Code |
+| `mcp-server/` | 零依赖 demo MCP server + 握手自测 | 人和 AI |
+| `.claude/skills/` | 项目级 Skill（project-status、new-feature） | Claude Code |
+| `docs/MCP与Skill接入实录.md` | MCP/Skill 接入教学实录 | 人 |
 
 ## 工作规则
 
@@ -46,6 +50,13 @@
 流程中的暂停点：
 1. 拆解后 → 你可以修改任务计划
 2. 每个任务执行后 → 你可以验收代码、要求修改或跳过
+
+## 扩展能力：MCP 与 Skill
+
+- **MCP**（`.mcp.json` + `mcp-server/`）给 AI 加工具：本项目接入 harness-demo server，
+  提供 list_features / get_feature / project_status。验证：`node mcp-server/test.js`、`claude mcp list`
+- **Skill**（`.claude/skills/`）给 AI 加流程：project-status 强制取证式汇报，new-feature 引导登记新功能
+- 接入过程与写法拆解见 `docs/MCP与Skill接入实录.md`
 
 ## 常用命令
 

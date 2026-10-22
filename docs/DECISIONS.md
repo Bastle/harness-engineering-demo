@@ -131,3 +131,35 @@ AI 辅助开发工具越来越多（Claude Code、GitHub Copilot、Cursor、Wind
 1. 去掉任务级验收，只保留功能级验收
 2. 去掉人工审核拆解，只审核最终结果
 3. 切换为全自动 workflow
+
+---
+
+## ADR-006：MCP server 用零依赖 Node 手写 stdio 协议而非官方 SDK
+
+**日期**：2026-10-22
+**状态**：已采纳
+
+### 背景
+要给本项目接入一个教学用的本地 MCP server。两个候选：用官方
+`@modelcontextprotocol/sdk`，或者手写 stdio JSON-RPC。教学目标是
+"读者能看到 server 端实现、理解协议本质"。
+
+### 决策
+用 Node 零 npm 依赖手写 MCP stdio 协议（initialize / tools/list / tools/call
+三个方法），约 170 行，配独立握手自测脚本 test.js。
+
+### 理由
+1. **协议透明**：MCP stdio = 换行分隔的 JSON-RPC，手写后每一行都摊在读者面前
+2. **零门槛**：clone 即跑，无 node_modules、无安装步骤（init.sh 本就要求 node）
+3. **可控体量**：约 170 行 + 130 行测试，完整但不膨胀
+4. **测试独立**：test.js 自己就是最小 MCP 客户端，不依赖 claude CLI
+
+### 放弃的选项
+- **官方 SDK**：引入 node_modules 依赖，且把协议细节藏进框架，教学价值打折
+- **Python 实现**：可行，但与 init.sh 已有的 node 依赖不一致，多一种运行时
+- **只接第三方、不做本地实现**：读者看不到 server 端，"接入"变成"抄配置"
+
+### 实现
+- `mcp-server/index.js`：server 实现（只读工具：list_features / get_feature / project_status）
+- `mcp-server/test.js`：握手自测，进 make test 统一验证入口
+- `.mcp.json`：项目级配置，接入过程记录见 docs/MCP与Skill接入实录.md

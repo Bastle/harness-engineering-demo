@@ -23,12 +23,22 @@ harness-demo/
 ├── PROGRESS.md            # 项目进度追踪
 ├── feature_list.json      # 功能清单（结构化任务追踪）
 ├── init.sh                # 环境检查和测试脚本
+├── .mcp.json              # 项目级 MCP 配置（接入工具 server）
+├── .claude/
+│   └── skills/            # 项目级 Skill（project-status、new-feature）
+├── mcp-server/
+│   ├── index.js           # 零依赖 demo MCP server（stdio JSON-RPC）
+│   └── test.js            # MCP 握手自测脚本
 ├── docs/
-│   └── DECISIONS.md       # 架构决策日志（为什么这样设计）
+│   ├── DECISIONS.md       # 架构决策日志（为什么这样设计）
+│   ├── AI开发的三道防线.md # 质量/范围/可维护性理论主文
+│   └── MCP与Skill接入实录.md # MCP 与 Skill 接入教学实录
 ├── hooks/
 │   └── pre-commit         # Git 提交前自动验证钩子
-└── templates/
-    └── NEW_FEATURE.md     # 新功能开工模板
+├── templates/
+│   └── NEW_FEATURE.md     # 新功能开工模板
+└── workflows/
+    └── dev-semi.js        # 半自动开发 workflow
 ```
 
 ## 快速开始
@@ -63,6 +73,11 @@ chmod +x .git/hooks/pre-commit
 | 7 | init.sh | 如何编写验证脚本 |
 | 8 | docs/DECISIONS.md | 如何记录设计决策 |
 | 9 | hooks/pre-commit | 如何用守护机制保障质量 |
+| 10 | workflows/dev-semi.js | 半自动工作流：AI 拆解 + 人工验收 |
+| 11 | docs/AI开发的三道防线.md | 质量保证 / 范围控制 / 可维护性 |
+| 12 | docs/MCP与Skill接入实录.md | 怎么给 AI 接工具（MCP）和流程（Skill） |
+| 13 | mcp-server/ + .mcp.json | 零依赖 MCP server 的完整实现 |
+| 14 | .claude/skills/ | 可复用 Skill 的写法 |
 
 ## 核心原则
 

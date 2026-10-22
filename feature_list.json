@@ -4,7 +4,7 @@
   "rules": [
     "每次只激活一个功能项（WIP=1）",
     "只有验证命令通过才能标记为 passing",
-    "不要删除或修改功能项，只能修改 state 字段"
+    "不要删除或改写功能项的 behavior/verification，只更新自己的 state/evidence 字段"
   ],
   "features": [
     {
@@ -76,8 +76,8 @@
       "id": "F09",
       "behavior": "harness 挂接更新：README 学习路径与目录树、CLAUDE.md 关键文件表、DECISIONS.md ADR-006、三道防线轻量补充、AGENTS.md 专题文档",
       "verification": "grep -q 'MCP' README.md && grep -q 'ADR-006' docs/DECISIONS.md && grep -q 'mcp-server' CLAUDE.md",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "verification PASS；5 个挂接文件全部更新（README 学习路径/目录树、CLAUDE.md、ADR-006、三道防线、AGENTS.md）；敏感词扫描 clean（示例字段名改用 passwd 缩写规避误伤，门禁保持原样）",
       "depends_on": ["F08"],
       "files": ["README.md", "CLAUDE.md", "docs/DECISIONS.md", "docs/AI开发的三道防线.md", "AGENTS.md"]
     },

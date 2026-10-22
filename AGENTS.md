@@ -35,3 +35,5 @@
 
 ## 专题文档
 - 功能清单说明（见 feature_list.json 内部注释）
+- MCP 与 Skill 接入实录（docs/MCP与Skill接入实录.md）
+- 质量保证 / 范围控制 / 可维护性（docs/AI开发的三道防线.md）

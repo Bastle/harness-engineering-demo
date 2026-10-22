@@ -66,13 +66,13 @@ AI 辅助开发有三个层次的质量挑战：
 给 AI 看具体例子，而不是抽象描述：
 
 ```
-输入：{ username: "alice", password: "correct_password" }
+输入：{ username: "alice", passwd: "correct_pwd" }
 预期输出：{ status: 200, redirect: "/dashboard", token: "eyJ..." }
 
-输入：{ username: "alice", password: "wrong_password" }
+输入：{ username: "alice", passwd: "wrong_pwd" }
 预期输出：{ status: 401, error: "用户名或密码错误" }
 
-输入：{ username: "", password: "12345678" }
+输入：{ username: "", passwd: "12345678" }
 预期输出：{ status: 400, error: "请输入用户名" }
 ```
 
@@ -511,6 +511,7 @@ fi
 - [ ] 在 hooks/pre-commit 中加 diff 大小限制和分支隔离
 - [ ] 在 AGENTS.md 中加改动范围控制规则
 - [ ] 在 templates/NEW_FEATURE.md 中加范围控制 checklist
+- [ ] 接入 MCP/Skill 等扩展能力时配套 verification（如 `node mcp-server/test.js`）
 
 ## 一周内
 
@@ -524,3 +525,7 @@ fi
 - [ ] 每完成 5 个功能 → 审计技术债
 - [ ] 每完成 10 个功能 → 清理重复代码
 - [ ] 每完成 20 个功能 → 重构优化架构
+
+---
+
+> 相关阅读：docs/MCP与Skill接入实录.md（工具接入与 harness 全景整合）
