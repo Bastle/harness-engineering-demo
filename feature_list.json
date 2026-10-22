@@ -85,8 +85,8 @@
       "id": "F10",
       "behavior": "MCP 握手测试与 Skill 结构检查纳入 init.sh（make test/lint 统一验证入口）",
       "verification": "make check",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "make check 全绿：test 6 通过 0 失败（含 MCP 握手自测 node mcp-server/test.js）、lint 6 通过 0 失败（含 Skill frontmatter 检查）；坏样例演练确认缺 name/description 的 SKILL.md 被 lint 捕获（exit=1）；cmd_check 补齐 lint，与 Makefile 文档一致",
       "depends_on": ["F04", "F06", "F07"],
       "files": ["init.sh", "Makefile"]
     }

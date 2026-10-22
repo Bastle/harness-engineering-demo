@@ -105,12 +105,22 @@ cmd_test() {
     fi
     
     # 测试5: 没有敏感信息泄露（只检查根目录和 harness 文件，跳过已有子目录）
-    local secrets=$(grep -l "password\|secret\|api_key\|API_KEY" AGENTS.md PROGRESS.md feature_list.json 2>/dev/null | wc -l)
-    if [ "$secrets" -eq 0 ]; then
+    # 模式串用括号写法（passwor[d] 等），匹配行为不变，但本文件自身不触发扫描
+    local leaks=$(grep -l "passwor[d]\|secre[t]\|api_ke[y]\|API_KE[Y]" AGENTS.md PROGRESS.md feature_list.json 2>/dev/null | wc -l)
+    if [ "$leaks" -eq 0 ]; then
         log_ok "Harness 文件无敏感信息泄露"
         ((passed++))
     else
         log_fail "Harness 文件中发现敏感信息"
+        ((failed++))
+    fi
+
+    # 测试6: MCP 握手自测（demo server 能被客户端完整调用）
+    if [ -f mcp-server/test.js ] && node mcp-server/test.js > /dev/null 2>&1; then
+        log_ok "MCP 握手自测通过（3 工具）"
+        ((passed++))
+    else
+        log_fail "MCP 握手自测失败（node mcp-server/test.js）"
         ((failed++))
     fi
     
@@ -127,6 +137,8 @@ cmd_check() {
     cmd_setup
     echo ""
     cmd_test
+    echo ""
+    cmd_lint
     echo ""
     log_ok "完整验证通过"
 }
@@ -171,9 +183,9 @@ cmd_lint() {
         ((failed++))
     fi
 
-    # 检查4: 没有敏感信息泄露
-    local secrets=$(grep -rl "password\|secret\|api_key\|API_KEY" AGENTS.md PROGRESS.md feature_list.json CLAUDE.md 2>/dev/null | wc -l)
-    if [ "$secrets" -eq 0 ]; then
+    # 检查4: 没有敏感信息泄露（模式串括号写法，同测试5，避免自我触发）
+    local leaks=$(grep -rl "passwor[d]\|secre[t]\|api_ke[y]\|API_KE[Y]" AGENTS.md PROGRESS.md feature_list.json CLAUDE.md 2>/dev/null | wc -l)
+    if [ "$leaks" -eq 0 ]; then
         log_ok "无敏感信息泄露"
         ((passed++))
     else
@@ -191,6 +203,23 @@ cmd_lint() {
     done
     if [ "$shell_errors" -eq 0 ]; then
         log_ok "Shell 脚本语法正确"
+        ((passed++))
+    else
+        ((failed++))
+    fi
+
+    # 检查6: Skill frontmatter 必填字段（name/description 是触发机制的核心）
+    local skill_errors=0
+    for f in .claude/skills/*/SKILL.md; do
+        if [ -f "$f" ]; then
+            if ! grep -q '^name:' "$f" || ! grep -q '^description:' "$f"; then
+                log_fail "$f 缺少 name/description 字段"
+                ((skill_errors++))
+            fi
+        fi
+    done
+    if [ "$skill_errors" -eq 0 ]; then
+        log_ok "Skill frontmatter 字段完整"
         ((passed++))
     else
         ((failed++))
@@ -253,7 +282,7 @@ case "${1:-help}" in
         echo "用法: $0 [setup|test|check|lint|status]"
         echo "  setup  - 检查环境配置"
         echo "  test   - 运行测试"
-        echo "  check  - 完整验证（setup + test）"
+        echo "  check  - 完整验证（setup + test + lint）"
         echo "  lint   - 代码风格检查"
         echo "  status - 查看项目状态"
         exit 1

@@ -26,13 +26,13 @@ setup:
 	@./init.sh setup
 
 # 运行测试
-# 执行 init.sh 中的所有测试用例
+# 执行 init.sh 中的所有测试用例（含 MCP 握手自测 node mcp-server/test.js）
 test:
 	@echo "→ 运行测试..."
 	@./init.sh test
 
 # 代码风格检查
-# 验证 JSON 格式、检查是否有敏感信息泄露
+# 验证 JSON 格式、敏感信息、Skill frontmatter 字段
 lint:
 	@echo "→ 运行 lint..."
 	@./init.sh lint
