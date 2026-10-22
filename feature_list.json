@@ -51,8 +51,8 @@
       "id": "F06",
       "behavior": "编写实用 Skill project-status：运行 make status 并汇总项目状态",
       "verification": "test -f .claude/skills/project-status/SKILL.md && grep -q '^name: project-status' .claude/skills/project-status/SKILL.md && make status >/dev/null",
-      "state": "not_started",
-      "evidence": "",
+      "state": "passing",
+      "evidence": "verification PASS（文件存在 + frontmatter name 正确 + make status 可执行）",
       "files": [".claude/skills/project-status/SKILL.md"]
     },
     {
